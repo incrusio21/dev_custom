@@ -5,3 +5,4 @@
 tags
 node_modules
 __pycache__
+dev_custom/public/dist

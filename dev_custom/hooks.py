@@ -25,8 +25,10 @@ app_license = "mit"
 # ------------------
 
 # include js, css files in header of desk.html
-# app_include_css = "/assets/dev_custom/css/dev_custom.css"
 # app_include_js = "/assets/dev_custom/js/dev_custom.js"
+app_include_css = [
+	"dev_custom.bundle.css",
+]
 
 # include js, css files in header of web template
 # web_include_css = "/assets/dev_custom/css/dev_custom.css"
@@ -43,7 +45,9 @@ app_license = "mit"
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-# doctype_js = {"doctype" : "public/js/doctype.js"}
+doctype_js = {
+    "Customize Form" : "dev_custom/custom/customize_form.js"
+}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -129,9 +133,9 @@ app_license = "mit"
 # ---------------
 # Override standard doctype classes
 
-# override_doctype_class = {
-# 	"ToDo": "custom_app.overrides.CustomToDo"
-# }
+override_doctype_class = {
+	"Customize Form": "dev_custom.overrides.customize_form.CustomizeForm"
+}
 
 # Document Events
 # ---------------
@@ -174,9 +178,9 @@ app_license = "mit"
 # Overriding Methods
 # ------------------------------
 #
-# override_whitelisted_methods = {
-# 	"frappe.desk.doctype.event.event.get_events": "dev_custom.event.get_events"
-# }
+override_whitelisted_methods = {
+	"frappe.modules.utils.export_customizations": "dev_custom.modules.utils.export_customizations"
+}
 #
 # each overriding function accepts a `data` argument;
 # generated from the base implementation of the doctype dashboard,
@@ -242,3 +246,6 @@ app_license = "mit"
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
 
+extend_bootinfo = [
+	"dev_custom.startup.boot.bootinfo",
+]
