@@ -9,7 +9,7 @@ from frappe.utils.data import cint
 
 @frappe.whitelist()
 def export_customizations(
-	module: str, doctype: str, sync_on_migrate: bool = False, with_permissions: bool = False
+	module: str, doctype: str, sync_on_migrate: bool = False, with_permissions: bool = False, message: bool = True
 ):
 	"""Export Custom Field and Property Setter for the current document to the app folder.
 	This will be synced with bench migrate"""
@@ -21,9 +21,9 @@ def export_customizations(
 		frappe.throw(_("Only allowed to export customizations in developer mode"))
 
 	custom = {
-		"custom_fields": frappe.get_all("Custom Field", fields="*", filters={"dt": doctype}, order_by="name"),
+		"custom_fields": frappe.get_all("Custom Field", fields="*", filters={"dt": doctype, "module": module}, order_by="name"),
 		"property_setters": frappe.get_all(
-			"Property Setter", fields="*", filters={"doc_type": doctype}, order_by="name"
+			"Property Setter", fields="*", filters={"doc_type": doctype, "module": module}, order_by="name"
 		),
 		"custom_perms": [],
 		"links": frappe.get_all("DocType Link", fields="*", filters={"parent": doctype}, order_by="name"),
@@ -40,14 +40,25 @@ def export_customizations(
 	for d in frappe.get_meta(doctype).get_table_fields():
 		export_customizations(module, d.options, sync_on_migrate, with_permissions)
 
-	if custom["custom_fields"] or custom["property_setters"] or custom["custom_perms"]:
-		folder_path = os.path.join(get_module_path(module), "custom")
-		if not os.path.exists(folder_path):
-			os.makedirs(folder_path)
+	folder_path = os.path.join(get_module_path(module), "custom")
+	if not os.path.exists(folder_path):
+		os.makedirs(folder_path)
 
-		path = os.path.join(folder_path, scrub(doctype) + ".json")
+	path = os.path.join(folder_path, scrub(doctype) + ".json")
+	
+	if custom["custom_fields"] or custom["property_setters"] or custom["custom_perms"]:
 		with open(path, "w") as f:
 			f.write(frappe.as_json(custom))
 
-		frappe.msgprint(_("Customizations for <b>{0}</b> exported to:<br>{1}").format(doctype, path))
+		if message:
+			frappe.msgprint(_("Customizations for <b>{0}</b> exported to:<br>{1}").format(doctype, path))
+	
 		return path
+	else:
+		# Hapus file jika ada
+		if os.path.exists(path):
+			os.remove(path)
+			if message:
+				frappe.msgprint(_("Removed empty customizations file for <b>{0}</b>").format(doctype))
+		
+		return None

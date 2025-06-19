@@ -12,6 +12,7 @@ from frappe.core.doctype.doctype.doctype import (
 from frappe.custom.doctype.property_setter.property_setter import delete_property_setter
 
 from frappe.custom.doctype.customize_form.customize_form import CustomizeForm, docfield_properties
+from dev_custom.modules.utils import export_customizations
 
 class CustomizeForm(CustomizeForm):
     
@@ -58,6 +59,8 @@ class CustomizeForm(CustomizeForm):
                 doctype=self.doc_type,
                 enqueue_after_commit=True,
             )
+
+        export_customizations(module, self.doc_type, sync_on_migrate=1, message=0)
 	
     # tambahan module untuk setter baru 
     def make_property_setter(self, prop, value, property_type, fieldname=None, apply_on=None, row_name=None):
