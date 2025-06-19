@@ -7,27 +7,29 @@ frappe.customize_form.module_app = frappe.boot.default_module_app
 frappe.ui.form.off("Customize Form", "setup_export")
 frappe.ui.form.on("Customize Form", {
     refresh: function (frm) {
-		var dev_custom = $('<div class="inner-group-button dev-custom"></div>').prependTo(frm.page.custom_actions)
-        let field = frappe.ui.form.make_control({
-            df: {
-                fieldtype: "Link",
-                fieldname: "module_export",
-                options: "Module Def",
-                label: __("Module"),
-                change: () => {
-                    var data = field.$input.val()
-                    if(data){
-                        frappe.customize_form.module_app = data
-                    }
-                },
-            },
-            parent: dev_custom,
-            render_input: 1,
-        });
-
-        field.toggle_label(false);
-		field.toggle_description(false)
-        field.$input.val(frappe.customize_form.module_app)
+		if(frm.page.custom_actions.find(".dev-custom").length == 0){
+			var dev_custom = $('<div class="inner-group-button dev-custom"></div>').prependTo(frm.page.custom_actions)
+			let field = frappe.ui.form.make_control({
+				df: {
+					fieldtype: "Link",
+					fieldname: "module_export",
+					options: "Module Def",
+					label: __("Module"),
+					change: () => {
+						var data = field.$input.val()
+						if(data){
+							frappe.customize_form.module_app = data
+						}
+					},
+				},
+				parent: dev_custom,
+				render_input: 1,
+			});
+	
+			field.toggle_label(false);
+			field.toggle_description(false)
+			field.$input.val(frappe.customize_form.module_app)
+		}
 	},
     setup_export(frm) {
 		if (frappe.boot.developer_mode) {
