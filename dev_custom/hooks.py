@@ -134,7 +134,8 @@ doctype_js = {
 # Override standard doctype classes
 
 override_doctype_class = {
-	"Customize Form": "dev_custom.overrides.customize_form.CustomizeForm"
+	"Customize Form": "dev_custom.overrides.customize_form.CustomizeForm",
+    "Custom Field": "dev_custom.overrides.custom_field.CustomField"
 }
 
 # Document Events

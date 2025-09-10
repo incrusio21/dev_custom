@@ -3,11 +3,12 @@
 
 import os
 import json
+import subprocess
 
 import git
-from git import TagReference
 
 import frappe
+from frappe.build import get_node_env
 from frappe.utils.synchronization import filelock
 
 def update_app_version(site_path):
@@ -23,7 +24,8 @@ def _update_app_version(version_config_path):
         apps = json.loads(f.read())
     
     for app, tags in apps.items():
-        repo = git.Repo(frappe.get_app_source_path(app), search_parent_directories=True)
+        source_app = frappe.get_app_source_path(app)
+        repo = git.Repo(source_app, search_parent_directories=True)
         is_local = any(tag.name == tags for tag in repo.tags)
 
         if not is_local:
@@ -39,5 +41,11 @@ def _update_app_version(version_config_path):
 
         repo.git.checkout(tags, force=True)
         print(f"{app} use version {tags}")
+  
+        command = f"yarn install"
+        frappe.commands.popen(command, cwd=source_app, env=get_node_env(), raise_err=True)
 
+    print(f"bench build for apps")
+    command = f"bench build --apps {','.join(apps.keys())}"
+    frappe.commands.popen(command, env=get_node_env(), raise_err=True)
         
