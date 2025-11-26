@@ -2,6 +2,7 @@
 # License: MIT. See LICENSE
 
 import frappe
+from frappe import _
 from  frappe.custom.doctype.custom_field.custom_field import CustomField
 from frappe.utils import cstr, random_string
 
