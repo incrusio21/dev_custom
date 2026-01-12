@@ -4,7 +4,7 @@
 import frappe
 
 def bootinfo(bootinfo):
-    bootinfo["default_module_app"] = frappe.get_cached_value(
-        "Developer Setting", None, "default_module"
-    )
-    print("benar")
+    pass
+    # bootinfo["default_module_app"] = frappe.get_cached_value(
+    #     "Developer Setting", None, "default_module"
+    # )

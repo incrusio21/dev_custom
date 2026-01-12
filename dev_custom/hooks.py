@@ -247,6 +247,6 @@ override_whitelisted_methods = {
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
 
-extend_bootinfo = [
-	"dev_custom.startup.boot.bootinfo",
-]
+# extend_bootinfo = [
+# 	"dev_custom.startup.boot.bootinfo",
+# ]
