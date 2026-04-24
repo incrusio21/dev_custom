@@ -135,7 +135,8 @@ doctype_js = {
 
 override_doctype_class = {
 	"Customize Form": "dev_custom.overrides.customize_form.CustomizeForm",
-    "Custom Field": "dev_custom.overrides.custom_field.CustomField"
+    "Custom Field": "dev_custom.overrides.custom_field.CustomField",
+    "Transaction Deletion Record": "dev_custom.overrides.transaction_deletion_record.DevTransactionDeletionRecord",
 }
 
 # Document Events
