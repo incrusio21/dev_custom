@@ -19,7 +19,7 @@ def update_app_version(site_path):
             _update_app_version(version_path)
 
         
-def _update_app_version(version_config_path):
+def _update_app_version(version_config_path, remote_name="upstream"):
     with open(version_config_path) as f:
         apps = json.loads(f.read())
     
@@ -29,7 +29,7 @@ def _update_app_version(version_config_path):
         is_local = any(tag.name == tags for tag in repo.tags)
 
         if not is_local:
-            repo.remote("upstream").fetch(
+            repo.remote(remote_name).fetch(
                 refspec=f"refs/tags/{tags}:refs/tags/{tags}", 
                 no_tags=True,
                 verbose=True
